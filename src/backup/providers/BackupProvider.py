@@ -1,7 +1,8 @@
 """A BackupProvider Service Provider."""
 
 from masonite.packages import PackageProvider
-
+from ..Backup import Backup
+from ..commands import BackupRunCommand
 
 class BackupProvider(PackageProvider):
 
@@ -15,6 +16,9 @@ class BackupProvider(PackageProvider):
 
     def register(self):
         super().register()
+        
+        self.application.bind("backup", Backup(application=self.application))
+        self.application.make("commands").add(BackupRunCommand(application=self.application))
 
     def boot(self):
         """Boots services required by the container."""

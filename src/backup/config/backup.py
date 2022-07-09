@@ -1,12 +1,25 @@
 """Backup Settings"""
 
+from masonite.utils.location import base_path
+
 """
 |--------------------------------------------------------------------------
-| A Heading of The Setting Being Set
+| Masonite Backup
 |--------------------------------------------------------------------------
 |
-| A quick description
+| This is the configuration file for the Masonite Backup package.
 |
 """
 
-SETTING = "some value"
+FILENAME = "backup"
+DIRECTORY = "backup"
+SOURCE = {
+    "root": base_path(),
+    "excludes": [
+        ".git",
+        "storage",
+        "venv",
+        "node_modules",
+        "__pycache__",
+    ],
+}
