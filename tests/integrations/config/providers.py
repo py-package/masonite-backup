@@ -50,4 +50,4 @@ PROVIDERS = [
     ORMProvider
 ]
 
-PROVIDERS += [ BackupProvider ]
+PROVIDERS += [BackupProvider]
