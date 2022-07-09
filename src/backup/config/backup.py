@@ -1,3 +1,4 @@
+# flake8: noqa F501
 """Backup Settings"""
 
 from masonite.utils.location import base_path
@@ -11,8 +12,8 @@ from masonite.utils.location import base_path
 |
 """
 
-FILENAME = "backup" # The filename of the backup file. (without the extension)
-DIRECTORY = "backup" # storage/backup
+FILENAME = "backup"  # The filename of the backup file. (without the extension)
+DIRECTORY = "backup"  # storage/backup
 SOURCE = {
     "root": base_path(),
     "excludes": [

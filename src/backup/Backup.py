@@ -1,3 +1,4 @@
+# flake8: noqa F501
 import pathlib
 import shutil
 import tempfile
@@ -25,19 +26,21 @@ class Backup:
         """
         Backup the database.
         """
-        
+
         db_config = config("database.databases")
         default = db_config.get("default")
         connection = db_config.get(default)
         driver = connection.get("driver")
 
-        db_file_path = base_path("{}.gz".format("database-" + str(datetime.timestamp(datetime.now()))))
+        db_file_path = base_path(
+            "{}.gz".format("database-" + str(datetime.timestamp(datetime.now())))
+        )
 
         if driver == "sqlite":
             pass
         elif driver == "mysql":
             command_str = f"mysqldump -u {connection.get('user')} -p{connection.get('password')} {connection.get('database')}"
-            
+
         elif driver == "postgres":
             command_str = f"pg_dump -U{connection.get('user')} -h{connection.get('host')} -p{connection.get('port')} -d{connection.get('database')}"
 
@@ -49,7 +52,7 @@ class Backup:
 
         elif driver == "oracle":
             command_str = f"sqlplus -S{connection.get('user')}/{connection.get('password')}@{connection.get('host')}:{connection.get('port')}/{connection.get('database')}"
-      
+
         if command_str:
             with gzip.open(db_file_path, "wb") as f:
                 popen = subprocess.Popen(
@@ -59,7 +62,7 @@ class Backup:
                     universal_newlines=True,
                 )
                 for stdout_line in iter(popen.stdout.readline, ""):
-                    f.write(stdout_line.encode('utf-8'))
+                    f.write(stdout_line.encode("utf-8"))
                 popen.stdout.close()
                 popen.wait()
         return db_file_path
