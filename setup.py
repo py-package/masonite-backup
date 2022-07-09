@@ -22,7 +22,7 @@ setup(
     url="https://github.com/py-package/masonite-backup",
     # Author details
     author="Yubaraj Shrestha",
-    author_email="info@pypackage.com",
+    author_email="yubaraj@pypackage.com",
     # Choose your license
     license="MIT license",
     # If your package should include things you specify in your MANIFEST.in file
