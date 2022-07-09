@@ -18,7 +18,7 @@ class BackupRunCommand(Command):
     def handle(self):
         if not self.validate_options():
             return
-        
+
         self.info("Starting backup...")
 
         if self.option("only-db"):

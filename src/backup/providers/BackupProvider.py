@@ -4,19 +4,15 @@ from masonite.packages import PackageProvider
 from ..Backup import Backup
 from ..commands import BackupRunCommand
 
-class BackupProvider(PackageProvider):
 
+class BackupProvider(PackageProvider):
     def configure(self):
         """Register objects into the Service Container."""
-        (
-            self.root("backup")
-            .name("backup")
-            .config("config/backup.py", publish=True)
-        )
+        (self.root("backup").name("backup").config("config/backup.py", publish=True))
 
     def register(self):
         super().register()
-        
+
         self.application.bind("backup", Backup(application=self.application))
         self.application.make("commands").add(BackupRunCommand(application=self.application))
 
