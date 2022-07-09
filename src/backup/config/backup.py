@@ -11,8 +11,8 @@ from masonite.utils.location import base_path
 |
 """
 
-FILENAME = "backup"
-DIRECTORY = "backup"
+FILENAME = "backup" # The filename of the backup file. (without the extension)
+DIRECTORY = "backup" # storage/backup
 SOURCE = {
     "root": base_path(),
     "excludes": [
