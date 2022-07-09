@@ -8,7 +8,7 @@
   </a>
   <img alt="GitHub Workflow Status (branch)" src="https://github.com/py-package/masonite-backup/actions/workflows/pythonapp.yml/badge.svg">
   <img alt="PyPI" src="https://img.shields.io/pypi/v/masonite-backup">
-  <img src="https://img.shields.io/badge/python-3.6+-blue.svg" alt="Python Version">
+  <img src="https://img.shields.io/badge/python-3.7+-blue.svg" alt="Python Version">
   <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/py-package/masonite-backup?include_prereleases">
   <img alt="License" src="https://img.shields.io/github/license/py-package/masonite-backup">
   <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
