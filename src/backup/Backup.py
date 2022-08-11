@@ -9,12 +9,17 @@ from datetime import datetime
 from masonite.utils.location import base_path
 import subprocess
 import gzip
+from masonite.facades import Mail
+from .mailables.Backup import Backup as BackupMailable
 
 
 class Backup:
     def __init__(self, application) -> None:
         self.app = application
         self.backup_config = config("backup")
+
+        self.db_file_path = None
+        self.archive_file_path = None
 
     def accept(self, path):
         for pattern in self.backup_config.get("source").get("excludes"):
@@ -32,7 +37,7 @@ class Backup:
         connection = db_config.get(default)
         driver = connection.get("driver")
 
-        db_file_path = base_path(
+        self.db_file_path = base_path(
             "{}.gz".format("database-" + str(datetime.timestamp(datetime.now())))
         )
 
@@ -54,7 +59,7 @@ class Backup:
             command_str = f"sqlplus -S{connection.get('user')}/{connection.get('password')}@{connection.get('host')}:{connection.get('port')}/{connection.get('database')}"
 
         if command_str:
-            with gzip.open(db_file_path, "wb") as f:
+            with gzip.open(self.db_file_path, "wb") as f:
                 popen = subprocess.Popen(
                     [command_str],
                     stdout=subprocess.PIPE,
@@ -65,7 +70,7 @@ class Backup:
                     f.write(stdout_line.encode("utf-8"))
                 popen.stdout.close()
                 popen.wait()
-        return db_file_path
+        return self.db_file_path
 
     def files(self):
         """
@@ -82,7 +87,7 @@ class Backup:
         if not pathlib.Path(output_dir).exists():
             pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
 
-        path_to_archive = pathlib.Path(output_dir).joinpath(filename)
+        self.archive_file_path = pathlib.Path(output_dir).joinpath(filename)
 
         with tempfile.TemporaryDirectory() as tmp:
             shutil.copytree(
@@ -92,5 +97,36 @@ class Backup:
             )
 
             with patch("os.path.isfile", side_effect=self.accept):
-                make_archive(path_to_archive, "zip", tmp)
-        return path_to_archive
+                make_archive(self.archive_file_path, "zip", tmp)
+
+        return f"{self.archive_file_path}.zip"
+
+    def email(self):
+        """
+        Email the backup.
+        """
+
+        if not self.backup_config.get("email_backup", False):
+            return
+
+        if self.archive_file_path != None and pathlib.Path(f"{self.archive_file_path}.zip").exists():
+            Mail.mailable(
+                BackupMailable().attach(f"System Backup.zip", f"{self.archive_file_path}.zip")
+            ).send()
+
+        if self.db_file_path != None and pathlib.Path(self.db_file_path).exists():
+            ext = self.db_file_path.split(".")[-1]
+            Mail.mailable(
+                BackupMailable().attach(f"Database Backup.{ext}", self.db_file_path)
+            ).send()
+
+        self.cleanup()
+
+    def cleanup(self):
+        """
+        Cleanup the backup files.
+        """
+        if self.archive_file_path != None and pathlib.Path(self.archive_file_path).exists():
+            pathlib.Path(self.archive_file_path).unlink()
+        if self.db_file_path != None and pathlib.Path(self.db_file_path).exists():
+            pathlib.Path(self.db_file_path).unlink()

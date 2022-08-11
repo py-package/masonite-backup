@@ -24,3 +24,6 @@ SOURCE = {
         "__pycache__",
     ],
 }
+EMAIL_BACKUP = True  # Whether or not to email the backup.
+EMAIL_BACKUP_TO = "yubara@pypackage.com" # The email address to send the backup to.
+EMAIL_SUBJECT = "System Backup" # The email subject.
