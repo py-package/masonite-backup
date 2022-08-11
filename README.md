@@ -82,6 +82,16 @@ EMAIL_BACKUP = False  # Whether or not to email the backup.
 EMAIL_BACKUP_TO = ""  # The email address to send the backup to.
 EMAIL_SUBJECT = "System Backup"  # The email subject.
 ```
+> Note: Make sure you have `EMAIL_BACKUP` set to `True` and `EMAIL_BACKUP_TO` set to a valid email address, to send the backup via email. Also don't forget to setup SMTP in `config/mail.py` configuration file or in `.env` file.
+
+```sh
+MAIL_DRIVER=smtp
+MAIL_FROM=
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+```
 
 **Backup Database and Files**
 
