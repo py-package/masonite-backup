@@ -15,3 +15,5 @@ dist
 *.db
 src/masonite_backup.egg-info
 storage
+*.gz
+*.zip
