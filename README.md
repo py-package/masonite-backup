@@ -14,7 +14,7 @@
   <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
-# Masonite Backup (WIP)
+# Masonite Backup
 
 Backup solution for Masonite.
 
@@ -24,7 +24,7 @@ Backup solution for Masonite.
 - [x] Backup Files
 - [x] Store Backup Locally in the filesystem
 - [x] Email Backup
-- [ ] Store Backup in other Masonite Supported Storage Drivers [s3]
+- [x] Store Backup in other Masonite Supported Storage Drivers [s3]
 
 
 ### Installation
@@ -78,11 +78,12 @@ SOURCE = {
     ],
 }
 
+S3_BACKUP = False # Whether or not to backup to S3.
 EMAIL_BACKUP = False  # Whether or not to email the backup.
 EMAIL_BACKUP_TO = ""  # The email address to send the backup to.
 EMAIL_SUBJECT = "System Backup"  # The email subject.
 ```
-> Note: Make sure you have `EMAIL_BACKUP` set to `True` and `EMAIL_BACKUP_TO` set to a valid email address, to send the backup via email. Also don't forget to setup SMTP in `config/mail.py` configuration file or in `.env` file.
+> Note: Make sure you have `EMAIL_BACKUP` set to `True` and `EMAIL_BACKUP_TO` set to a valid email address, to send the backup via email. Also don't forget to setup SMTP in `config/mail.py` configuration file or in `.env` file. In case you want to backup to S3, then make sure you have `S3_BACKUP` set to `True` and S3 storage configuration.
 
 ```sh
 MAIL_DRIVER=smtp
@@ -91,6 +92,11 @@ MAIL_HOST=
 MAIL_PORT=
 MAIL_USERNAME=
 MAIL_PASSWORD=
+
+AWS_CLIENT=
+AWS_SECRET=
+AWS_BUCKET=
+AWS_REGION=
 ```
 
 **Backup Database and Files**
@@ -111,17 +117,7 @@ python craft backup:run --only-db
 python craft backup:run --only-files
 ```
 
-
-## Contributing
-
-Please read the [Contributing Documentation](CONTRIBUTING.md) here.
-
-## Maintainers
-
-- [x] [Yubaraj Shrestha](https://www.github.com/py-package)
-
 ## License
-
 
 Backup is open-sourced software licensed under the [MIT license](LICENSE).
 

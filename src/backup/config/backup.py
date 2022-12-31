@@ -24,6 +24,7 @@ SOURCE = {
         "__pycache__",
     ],
 }
+S3_BACKUP = False  # Whether or not to backup in S3.
 EMAIL_BACKUP = False  # Whether or not to email the backup.
 EMAIL_BACKUP_TO = ""  # The email address to send the backup to.
 EMAIL_SUBJECT = "System Backup"  # The email subject.

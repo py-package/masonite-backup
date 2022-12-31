@@ -40,7 +40,10 @@ class BackupRunCommand(Command):
             os.remove(self.database_file_path)
             self.database_file_path = None
 
-        backup.email()
+        backup.email(self.info)
+        backup.s3(self.info)
+        backup.cleanup()
+
         self.info("============ Backup complete ============")
 
     def validate_options(self):
