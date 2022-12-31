@@ -101,7 +101,7 @@ class Backup:
 
         return f"{self.archive_file_path}.zip"
 
-    def email(self):
+    def email(self, info):
         """
         Email the backup.
         """
@@ -109,6 +109,7 @@ class Backup:
         if not self.backup_config.get("email_backup", False):
             return
 
+        info("Sending backup to email")
         if self.archive_file_path != None and pathlib.Path(f"{self.archive_file_path}.zip").exists():
             Mail.mailable(
                 BackupMailable().attach(f"System Backup.zip", f"{self.archive_file_path}.zip")
@@ -120,7 +121,24 @@ class Backup:
                 BackupMailable().attach(f"Database Backup.{ext}", self.db_file_path)
             ).send()
 
-        self.cleanup()
+    def s3(self, info):
+        """
+        Upload the backup to S3.
+        """
+        if not self.backup_config.get("s3_backup", False):
+            return
+
+        info("Uploading backup to S3")
+        if self.archive_file_path != None and pathlib.Path(f"{self.archive_file_path}.zip").exists():
+            self.app.make("storage").disk("s3").put(
+                f"System Backup.zip", f"{self.archive_file_path}.zip"
+            )
+
+        if self.db_file_path != None and pathlib.Path(self.db_file_path).exists():
+            ext = self.db_file_path.split(".")[-1]
+            self.app.make("storage").disk("s3").put(
+                f"Database Backup.{ext}", self.db_file_path
+            )
 
     def cleanup(self):
         """
